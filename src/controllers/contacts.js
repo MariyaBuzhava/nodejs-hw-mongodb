@@ -68,3 +68,13 @@ export const deleteContactController = async (req, res, next) => {
   }
   res.status(204).send();
 };
+
+export const validateBody = (schema) => {
+  return (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      throw createHttpError(400, error.message);
+    }
+    next();
+  };
+};
