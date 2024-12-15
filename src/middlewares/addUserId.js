@@ -1,4 +1,6 @@
 export const addUserId = (req, res, next) => {
-  req.body.userId = req.user._id;
+  if (req.user && req.user._id) {
+    req.body.userId = req.user._id.toString();
+  }
   next();
 };
