@@ -1,0 +1,42 @@
+tags:
+  - Auth
+summary: Register a new user
+operationId: registerUser
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            description: 'User full name'
+            example: 'John Doe'
+          email:
+            type: string
+            description: 'User email address'
+            example: 'user@example.com'
+          password:
+            type: string
+            description: 'User password'
+            example: 'password123'
+responses:
+  '201':
+    description: 'Successfully registered'
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'User successfully registered'
+  '400':
+    description: 'Invalid input data'
+  '409':
+    description: 'User already exists'
+security: []

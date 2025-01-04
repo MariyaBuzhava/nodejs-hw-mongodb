@@ -27,6 +27,15 @@ paths:
       $ref: ../src/swagger/paths/contacts/post.yaml
     get:
       $ref: ../src/swagger/paths/contacts/get.yaml
+  /auth/login:
+    post:
+      $ref: ../src/swagger/paths/auth/login.yaml
+  /auth/register:
+    post:
+      $ref: ../src/swagger/paths/auth/register.yaml
+  /auth/logout:
+    post:
+      $ref: ../src/swagger/paths/auth/logout.yaml
 
 components:
   securitySchemes:
