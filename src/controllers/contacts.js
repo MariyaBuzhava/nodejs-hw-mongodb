@@ -56,6 +56,7 @@ export const createContactController = async (req, res) => {
   if (photo) {
     photoUrl = await saveFileToCloudinary(photo);
   }
+
   const contact = await createContact({
     ...req.body,
     photo: photoUrl,
