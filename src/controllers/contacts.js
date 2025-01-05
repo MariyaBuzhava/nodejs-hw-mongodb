@@ -18,6 +18,10 @@ export const getContactsController = async (req, res) => {
 
   const filter = parseFilterParams(req.query);
 
+  if (!req.user || !req.user._id) {
+    throw createHttpError(400, 'User ID is required');
+  }
+
   const contacts = await getAllContacts({
     page,
     perPage,
@@ -36,6 +40,11 @@ export const getContactsController = async (req, res) => {
 
 export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
+
+  if (!req.user || !req.user._id) {
+    throw createHttpError(400, 'User ID is required');
+  }
+
   const contact = await getContactById(contactId, req.user._id);
 
   if (!contact) {
@@ -57,12 +66,16 @@ export const createContactController = async (req, res) => {
     photoUrl = await saveFileToCloudinary(photo);
   }
 
-  const contact = await createContact({
+  const contactData = {
     ...req.body,
     photo: photoUrl,
-    userId: req.user._id,
-  });
+  };
 
+  if (req.user && req.user._id) {
+    contactData.userId = req.user._id;
+  }
+
+  const contact = await createContact(contactData);
   res.status(201).json({
     status: 201,
     message: 'Successfully created a contact!',
@@ -90,7 +103,7 @@ export const patchContactController = async (req, res, next) => {
       ...req.body,
       photo: photoUrl,
     },
-    req.user._id,
+    req.user?._id,
   );
 
   if (!updatedContact) {
@@ -107,6 +120,9 @@ export const patchContactController = async (req, res, next) => {
 
 export const deleteContactController = async (req, res, next) => {
   const { contactId } = req.params;
+  if (!req.user || !req.user._id) {
+    throw createHttpError(400, 'User ID is required');
+  }
   const contact = await deleteContact(contactId, req.user._id);
   if (!contact) {
     next(createHttpError(404, 'Contact not found'));
