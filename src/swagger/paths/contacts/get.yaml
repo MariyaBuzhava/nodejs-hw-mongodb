@@ -10,12 +10,17 @@ parameters:
     name: page
     schema:
       type: integer
+      minimum: 1
+    description: 'The page number to retrieve. Default is 1.'
     example: 1
   - in: query
     name: perPage
     schema:
       type: integer
-      example: 10
+      minimum: 1
+      maximum: 100
+    description: 'The number of contacts per page. Default is 10.'
+    example: 10
   - in: query
     name: sortBy
     schema:
@@ -28,36 +33,20 @@ parameters:
       type: string
       enum: ['asc', 'desc']
       example: 'asc'
-  - in: query
-    name: name
-    schema:
-      type: string
-    example: 'John Doe'
-  - in: query
-    name: phoneNumber
-    schema:
-      type: string
-    example: '+987654321'
-  - in: query
-    name: email
-    schema:
-      type: string
-    example: 'john.doe@example.com'
-  - in: query
-    name: isFavourite
-    schema:
-      type: boolean
-    example: false
+      description: 'Sort order. Can be "asc" for ascending or "desc" for descending. Default is "asc".'
   - in: query
     name: contactType
     schema:
       type: string
+      enum: ['work', 'home', 'personal']
+    description: 'Filter by contact type.'
     example: 'personal'
   - in: query
-    name: userId
+    name: isFavourite
     schema:
-      type: string
-    example: '65e4decdd286b30065d54af9'
+      type: boolean
+    description: 'Filter by whether the contact is marked as favorite.'
+    example: false
 responses:
   '200':
     description: 'Successfully found contacts!'
@@ -93,21 +82,21 @@ responses:
                     $ref: '../../components/schemas/contact.yaml'
                 page:
                   type: number
-                  example: 2
+                  example: 1
                 perPage:
                   type: number
-                  example: 4
+                  example: 10
                 totalItems:
                   type: number
-                  example: 4
+                  example: 50
                 totalPages:
                   type: number
-                  example: 4
+                  example: 5
                 hasNextPage:
                   type: boolean
-                  example: false
+                  example: true
                 hasPreviousPage:
                   type: boolean
-                  example: true
+                  example: false
   '401':
     $ref: '../../components/responses/401.yaml'

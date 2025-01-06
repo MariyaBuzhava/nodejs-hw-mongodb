@@ -137,7 +137,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -159,7 +159,16 @@
                   },
                   "contactType": {
                     "type": "string",
-                    "example": "business"
+                    "enum": [
+                      "work",
+                      "home",
+                      "personal"
+                    ]
+                  },
+                  "photo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Photo file of the contact"
                   }
                 }
               }
@@ -227,8 +236,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Successfully deleted contact",
+          "204": {
+            "description": "Successfully deleted contact. No content is returned.",
             "content": {
               "application/json": {
                 "schema": {
@@ -240,7 +249,7 @@
                   "properties": {
                     "status": {
                       "type": "integer",
-                      "example": 200
+                      "example": 204
                     },
                     "message": {
                       "type": "string",
@@ -274,17 +283,14 @@
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "required": [
                   "name",
-                  "phoneNumber",
-                  "email",
-                  "isFavourite",
-                  "contactType",
-                  "userId"
+                  "phoneNumber"
                 ],
                 "properties": {
                   "name": {
@@ -305,7 +311,7 @@
                   "isFavourite": {
                     "description": "Indicates if the contact is marked as favorite",
                     "type": "boolean",
-                    "example": false
+                    "default": false
                   },
                   "contactType": {
                     "description": "Type of contact",
@@ -314,12 +320,8 @@
                       "work",
                       "home",
                       "personal"
-                    ]
-                  },
-                  "userId": {
-                    "description": "Contact's id",
-                    "type": "string",
-                    "example": "65e4decdd286b30065d54af9"
+                    ],
+                    "default": "personal"
                   },
                   "photo": {
                     "description": "Student's photo",
@@ -383,8 +385,10 @@
             "in": "query",
             "name": "page",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             },
+            "description": "The page number to retrieve. Default is 1.",
             "example": 1
           },
           {
@@ -392,8 +396,11 @@
             "name": "perPage",
             "schema": {
               "type": "integer",
-              "example": 10
-            }
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "The number of contacts per page. Default is 10.",
+            "example": 10
           },
           {
             "in": "query",
@@ -413,32 +420,23 @@
                 "asc",
                 "desc"
               ],
-              "example": "asc"
+              "example": "asc",
+              "description": "Sort order. Can be \"asc\" for ascending or \"desc\" for descending. Default is \"asc\"."
             }
           },
           {
             "in": "query",
-            "name": "name",
+            "name": "contactType",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "work",
+                "home",
+                "personal"
+              ]
             },
-            "example": "John Doe"
-          },
-          {
-            "in": "query",
-            "name": "phoneNumber",
-            "schema": {
-              "type": "string"
-            },
-            "example": "+987654321"
-          },
-          {
-            "in": "query",
-            "name": "email",
-            "schema": {
-              "type": "string"
-            },
-            "example": "john.doe@example.com"
+            "description": "Filter by contact type.",
+            "example": "personal"
           },
           {
             "in": "query",
@@ -446,23 +444,8 @@
             "schema": {
               "type": "boolean"
             },
+            "description": "Filter by whether the contact is marked as favorite.",
             "example": false
-          },
-          {
-            "in": "query",
-            "name": "contactType",
-            "schema": {
-              "type": "string"
-            },
-            "example": "personal"
-          },
-          {
-            "in": "query",
-            "name": "userId",
-            "schema": {
-              "type": "string"
-            },
-            "example": "65e4decdd286b30065d54af9"
           }
         ],
         "responses": {
@@ -506,27 +489,27 @@
                         },
                         "page": {
                           "type": "number",
-                          "example": 2
+                          "example": 1
                         },
                         "perPage": {
                           "type": "number",
-                          "example": 4
+                          "example": 10
                         },
                         "totalItems": {
                           "type": "number",
-                          "example": 4
+                          "example": 50
                         },
                         "totalPages": {
                           "type": "number",
-                          "example": 4
+                          "example": 5
                         },
                         "hasNextPage": {
                           "type": "boolean",
-                          "example": false
+                          "example": true
                         },
                         "hasPreviousPage": {
                           "type": "boolean",
-                          "example": true
+                          "example": false
                         }
                       }
                     }
