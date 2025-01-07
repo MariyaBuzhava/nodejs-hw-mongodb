@@ -237,28 +237,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Successfully deleted contact. No content is returned.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "status",
-                    "message"
-                  ],
-                  "properties": {
-                    "status": {
-                      "type": "integer",
-                      "example": 204
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Successfully deleted contact."
-                    }
-                  }
-                }
-              }
-            }
+            "description": "Successfully deleted contact. No content is returned."
           },
           "401": {
             "$ref": "#/components/responses/401"
